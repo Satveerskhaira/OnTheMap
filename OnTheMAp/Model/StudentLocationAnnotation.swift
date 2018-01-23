@@ -28,3 +28,14 @@ class StudentLocationAnnotation: NSObject, MKAnnotation {
         return locationName
     }
 }
+
+class StudentLocation  {
+    var title : String
+    var latitude : Double
+    var longitude : Double
+    init(title : String, latitude: Double, longitude : Double) {
+        self.title = title
+        self.latitude = latitude
+        self.longitude = longitude
+    }
+}

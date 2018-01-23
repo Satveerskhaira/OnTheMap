@@ -15,8 +15,8 @@ class AddLocationViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        self.navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(cancel))
-        navigationItem.title = "Add Location"
+//        self.navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(cancel))
+//        navigationItem.title = "Add Location"
         
     }
 
@@ -25,25 +25,21 @@ class AddLocationViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     // Cancel
-    @objc func cancel() {
-        dismiss(animated: true, completion: nil)
-   
-    }
-    @IBAction func serachStudentLocation(_ sender: Any) {
-        let storeStudentLocation = storyboard?.instantiateViewController(withIdentifier: "StoreStudentLocation") as! StoreStudentLoactionViewController
-        storeStudentLocation.studentLocation = newLocation.text
-        storeStudentLocation.studentURL = studentURL.text
-        self.present(storeStudentLocation, animated: true, completion: nil)
-    }
+//    @objc func cancel() {
+//        dismiss(animated: true, completion: nil)
+//    }
     
-    /*
+    
+    
     // MARK: - Navigation
 
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
+        
+        // Pass the location and web address to the new view controller.
+        let storeStudentLocation = segue.destination as! StoreStudentLoactionViewController
+        storeStudentLocation.studentLocation = newLocation.text
+        storeStudentLocation.studentURL = studentURL.text
     }
-    */
-
+    
 }

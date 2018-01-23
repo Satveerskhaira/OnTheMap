@@ -39,7 +39,9 @@ extension TableViewController {
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // Number of row should be equal to students
-        return (appDelegate.student?.results.count)!
+        //return (appDelegate.student?.results.count)!
+        return (appDelegate.student.count)
+
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -55,12 +57,16 @@ extension TableViewController {
         // get cell type
         let cellReuseIdentifier = "FavoriteTableViewCell"
        
-        let student = appDelegate.student?.results[(indexPath as NSIndexPath).row]
+        //let student = appDelegate.student?.results[(indexPath as NSIndexPath).row]
+        let student = appDelegate.student[(indexPath as NSIndexPath).row]
+
         let cell = tableView.dequeueReusableCell(withIdentifier: cellReuseIdentifier) as UITableViewCell!
         
         // set cell defaults
-        cell?.textLabel!.text = "\(student?.firstName ?? " ") \(student?.lastName ?? " ")"
-        cell?.detailTextLabel?.text = student?.mediaURL
+//        cell?.textLabel!.text = "\(student?.firstName ?? " ") \(student?.lastName ?? " ")"
+//        cell?.detailTextLabel?.text = student?.mediaURL
+        cell?.textLabel!.text = "\(student.firstName ?? " ") \(student.lastName ?? " ")"
+        cell?.detailTextLabel?.text = student.mediaURL
         cell?.imageView!.contentMode = UIViewContentMode.scaleAspectFit
         return cell!
     }

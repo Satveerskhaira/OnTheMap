@@ -17,16 +17,17 @@ struct Student : Decodable {
     
     struct Results : Decodable {
         let objectId : String
-        let uniqueKey : String
-        let firstName : String
-        let lastName: String
-        let mapString : String
-        let mediaURL : String
-        let latitude : Double
-        let longitude : Double
+        let uniqueKey : String?
+        let firstName : String?
+        let lastName: String?
+        let mapString : String?
+        let mediaURL : String?
+        let latitude : Double?
+        let longitude : Double?
     }
 }
 
+//
 struct Udacity :Decodable {
 
  let account : Account
@@ -51,6 +52,7 @@ struct UdacityError : Decodable {
     let error : String
 }
 
+//Current user name
 struct UserData : Decodable {
     
     let user : User
@@ -68,5 +70,6 @@ struct UserData : Decodable {
         }
     }
 }
+
 
 

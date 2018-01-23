@@ -15,10 +15,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     //Store students informations in array
     
-    var student: Student? = nil
+    var student = [Student.Results]() 
     var studentID : String? = nil
     var session : String? = nil
     var user : UserData? = nil
+    var currentUserObjectID : String?  = nil
   
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
