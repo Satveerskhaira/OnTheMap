@@ -8,7 +8,7 @@
 
 import UIKit
 
-class TableViewController: UITableViewController {
+class TableViewController: UIViewController {
     var appDelegate = AppDelegate()
     
     override func viewDidLoad() {
@@ -35,6 +35,7 @@ class TableViewController: UITableViewController {
     }
 }
 
+/*
 extension TableViewController {
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -71,3 +72,4 @@ extension TableViewController {
         return cell!
     }
 }
+ */
