@@ -33,7 +33,7 @@ class UdacityClient: NSObject {
     // Method to create URL
     
     
-    // Get session
+    // Get session and load data
     
     func authenticateWithViewController(_ name: String, _ pwd : String, _ viewController: UIViewController, handlerForAuth: @escaping (_ success : Bool, _ errorString : String?) -> Void) {
         // Create Session
@@ -60,6 +60,27 @@ class UdacityClient: NSObject {
                         })
                     }
                 })
+            }
+        }
+    }
+    
+    // MARK : Refresh
+    
+    func refreshData(_ handlerReloadData : @escaping (_ success : Bool, _ error : String?) -> Void ) {
+        // Remove old data
+        student.removeAll()
+        // reload data
+        self.studentData { (success, error) in
+            if success {
+                self.currentStudentLocation(handlerForCurrentStuLocation: { (success, error) in
+                    if success {
+                        handlerReloadData(true, error)
+                    } else {
+                        handlerReloadData(success, error)
+                    }
+                })
+            } else {
+                handlerReloadData(success, error)
             }
         }
     }
@@ -238,7 +259,35 @@ class UdacityClient: NSObject {
         task.resume()
     }
     
+    // MARK : Logout
     
+    func logout(_ handlerForLogout : @escaping (_ success : Bool, _ error : String?) -> Void) {
+        var request = URLRequest(url: URL(string: "https://www.udacity.com/api/session")!)
+        request.httpMethod = "DELETE"
+        var xsrfCookie: HTTPCookie? = nil
+        let sharedCookieStorage = HTTPCookieStorage.shared
+        for cookie in sharedCookieStorage.cookies! {
+            if cookie.name == "XSRF-TOKEN" { xsrfCookie = cookie }
+        }
+        if let xsrfCookie = xsrfCookie {
+            request.setValue(xsrfCookie.value, forHTTPHeaderField: "X-XSRF-TOKEN")
+        }
+        let session = URLSession.shared
+        let task = session.dataTask(with: request) { data, response, error in
+            if error != nil { // Handle error…
+                handlerForLogout(false, error?.localizedDescription)
+            }
+            let range = Range(5..<data!.count)
+            guard let newData = data?.subdata(in: range) /* subset response data! */ else {
+                handlerForLogout(false, error?.localizedDescription)
+                return
+            }
+            handlerForLogout(true, nil)
+        }
+        task.resume()
+    }
+    
+
     // MARK : create a URL from parameters
     func udacityURLWithParameter(_ parameters: [String:AnyObject], withPathExtension: String? = nil) -> URL {
         

@@ -11,7 +11,6 @@
 		D866B6061FE23D0D0028D46A /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D866B6051FE23D0D0028D46A /* MapKit.framework */; };
 		D866B6081FE5EC680028D46A /* GCDBlackBox.swift in Sources */ = {isa = PBXBuildFile; fileRef = D866B6071FE5EC680028D46A /* GCDBlackBox.swift */; };
 		D8A666352016EA820078B7C6 /* StudentTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8A666342016EA820078B7C6 /* StudentTableViewController.swift */; };
-		D8A666372016FD830078B7C6 /* BackUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8A666362016FD830078B7C6 /* BackUpViewController.swift */; };
 		D8AFDA8C1FE6EE7900D8DED1 /* AddLocationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8AFDA8B1FE6EE7900D8DED1 /* AddLocationViewController.swift */; };
 		D8AFDA8E1FE6F24700D8DED1 /* StoreStudentLoactionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8AFDA8D1FE6F24700D8DED1 /* StoreStudentLoactionViewController.swift */; };
 		D8B575AC1FD4DB2E00E48B42 /* UdacityClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8B575AB1FD4DB2E00E48B42 /* UdacityClient.swift */; };
@@ -19,7 +18,6 @@
 		D8B575B01FD4DE8100E48B42 /* UdacityConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8B575AF1FD4DE8100E48B42 /* UdacityConstants.swift */; };
 		D8E4F2411FD48FF8006AE56A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8E4F2401FD48FF8006AE56A /* AppDelegate.swift */; };
 		D8E4F2431FD48FF8006AE56A /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8E4F2421FD48FF8006AE56A /* MapViewController.swift */; };
-		D8E4F2451FD48FF8006AE56A /* TableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8E4F2441FD48FF8006AE56A /* TableViewController.swift */; };
 		D8E4F2481FD48FF8006AE56A /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D8E4F2461FD48FF8006AE56A /* Main.storyboard */; };
 		D8E4F24A1FD48FF8006AE56A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D8E4F2491FD48FF8006AE56A /* Assets.xcassets */; };
 		D8E4F24D1FD48FF8006AE56A /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D8E4F24B1FD48FF8006AE56A /* LaunchScreen.storyboard */; };
@@ -51,7 +49,6 @@
 		D866B6051FE23D0D0028D46A /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		D866B6071FE5EC680028D46A /* GCDBlackBox.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GCDBlackBox.swift; sourceTree = "<group>"; };
 		D8A666342016EA820078B7C6 /* StudentTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StudentTableViewController.swift; sourceTree = "<group>"; };
-		D8A666362016FD830078B7C6 /* BackUpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackUpViewController.swift; sourceTree = "<group>"; };
 		D8AFDA8B1FE6EE7900D8DED1 /* AddLocationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddLocationViewController.swift; sourceTree = "<group>"; };
 		D8AFDA8D1FE6F24700D8DED1 /* StoreStudentLoactionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreStudentLoactionViewController.swift; sourceTree = "<group>"; };
 		D8B575AB1FD4DB2E00E48B42 /* UdacityClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UdacityClient.swift; sourceTree = "<group>"; };
@@ -60,7 +57,6 @@
 		D8E4F23D1FD48FF8006AE56A /* OnTheMAp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = OnTheMAp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D8E4F2401FD48FF8006AE56A /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		D8E4F2421FD48FF8006AE56A /* MapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
-		D8E4F2441FD48FF8006AE56A /* TableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableViewController.swift; sourceTree = "<group>"; };
 		D8E4F2471FD48FF8006AE56A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		D8E4F2491FD48FF8006AE56A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		D8E4F24C1FD48FF8006AE56A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -197,11 +193,9 @@
 			children = (
 				D8B575AD1FD4DDA300E48B42 /* LoginViewController.swift */,
 				D8E4F2421FD48FF8006AE56A /* MapViewController.swift */,
-				D8E4F2441FD48FF8006AE56A /* TableViewController.swift */,
+				D8A666342016EA820078B7C6 /* StudentTableViewController.swift */,
 				D8AFDA8B1FE6EE7900D8DED1 /* AddLocationViewController.swift */,
 				D8AFDA8D1FE6F24700D8DED1 /* StoreStudentLoactionViewController.swift */,
-				D8A666342016EA820078B7C6 /* StudentTableViewController.swift */,
-				D8A666362016FD830078B7C6 /* BackUpViewController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -353,8 +347,6 @@
 				D8A666352016EA820078B7C6 /* StudentTableViewController.swift in Sources */,
 				D8AFDA8E1FE6F24700D8DED1 /* StoreStudentLoactionViewController.swift in Sources */,
 				D8B575AC1FD4DB2E00E48B42 /* UdacityClient.swift in Sources */,
-				D8E4F2451FD48FF8006AE56A /* TableViewController.swift in Sources */,
-				D8A666372016FD830078B7C6 /* BackUpViewController.swift in Sources */,
 				D8E4F2411FD48FF8006AE56A /* AppDelegate.swift in Sources */,
 				D8B575B01FD4DE8100E48B42 /* UdacityConstants.swift in Sources */,
 				D8E4F2431FD48FF8006AE56A /* MapViewController.swift in Sources */,

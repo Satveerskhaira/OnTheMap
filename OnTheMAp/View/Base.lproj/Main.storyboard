@@ -40,7 +40,11 @@
                                     <segue destination="Wy4-pv-qe0" kind="show" id="tpg-Zn-2SD"/>
                                 </connections>
                             </barButtonItem>
-                            <barButtonItem systemItem="refresh" id="E5C-ee-1ga"/>
+                            <barButtonItem systemItem="refresh" id="E5C-ee-1ga">
+                                <connections>
+                                    <action selector="refresh:" destination="9pv-A4-QxB" id="vcn-8A-jQx"/>
+                                </connections>
+                            </barButtonItem>
                         </rightBarButtonItems>
                     </navigationItem>
                     <connections>
@@ -215,9 +219,16 @@
                                     <segue destination="Wy4-pv-qe0" kind="show" id="jDT-Qj-qKq"/>
                                 </connections>
                             </barButtonItem>
-                            <barButtonItem systemItem="refresh" id="DsI-S5-AEi"/>
+                            <barButtonItem systemItem="refresh" id="DsI-S5-AEi">
+                                <connections>
+                                    <action selector="refresh:" destination="qwp-HI-apq" id="tu2-ao-oh5"/>
+                                </connections>
+                            </barButtonItem>
                         </rightBarButtonItems>
                     </navigationItem>
+                    <connections>
+                        <outlet property="studentTableView" destination="FRT-Mk-BzS" id="lS5-9a-xxx"/>
+                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="7Zc-CL-zG3" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -357,6 +368,6 @@
         <image name="second" width="30" height="30"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="jDT-Qj-qKq"/>
+        <segue reference="tpg-Zn-2SD"/>
     </inferredMetricsTieBreakers>
 </document>

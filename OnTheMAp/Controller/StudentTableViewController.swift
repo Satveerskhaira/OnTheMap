@@ -10,12 +10,18 @@ import UIKit
 
 class StudentTableViewController: UITableViewController {
     // Properties
+    @IBOutlet var studentTableView: UITableView!
+    
     
     var appDelegate: UdacityClient!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         appDelegate = UdacityClient.sharedInstance()
+        
+        // create and set logout button
+        navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .reply, target: self, action: #selector(logout))
+
     }
 
     override func didReceiveMemoryWarning() {
@@ -46,102 +52,54 @@ class StudentTableViewController: UITableViewController {
     }
     
 
-    /*
-    // Override to support conditional editing of the table view.
-    override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-        // Return false if you do not want the specified item to be editable.
-        return true
+    // MARK : Logout
+    
+    @objc func logout() {
+        UdacityClient.sharedInstance().logout { (success, error) in
+            if success {
+                self.dismiss(animated: true, completion: nil)
+            } else {
+                print(error!)
+            }
+        }
     }
-    */
-
-    /*
-    // Override to support editing the table view.
-    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
-        if editingStyle == .delete {
-            // Delete the row from the data source
-            tableView.deleteRows(at: [indexPath], with: .fade)
-        } else if editingStyle == .insert {
-            // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-        }    
+    
+    
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    // Open linked web site
+        let app = UIApplication.shared
+        let student = appDelegate.student[(indexPath as NSIndexPath).row]
+        if let toOpen = student.mediaURL {
+            app.open(URL(string: toOpen)!, options: [:], completionHandler: nil)
+        }
     }
-    */
-
-    /*
-    // Override to support rearranging the table view.
-    override func tableView(_ tableView: UITableView, moveRowAt fromIndexPath: IndexPath, to: IndexPath) {
-
+    
+    // MARK: Refesh data
+    
+    @IBAction func refresh(_ sender: Any) {
+        refreshData()
     }
-    */
-
-    /*
-    // Override to support conditional rearranging of the table view.
-    override func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
-        // Return false if you do not want the item to be re-orderable.
-        return true
-    }
-    */
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
-
 }
 
-// MARK : unwind segue
+
+
+// MARK : unwind segue and reload data
 extension StudentTableViewController {
     
     @IBAction func unwindSegue (segue : UIStoryboardSegue) {
-//        if let sender = segue.source as? StoreStudentLoactionViewController {
-//            print(sender.newLocationcatiolati)
-//            let studentLocation = StudentLocationAnnotation(title: ((appDelegate.user!.user.firstName) + " " + (appDelegate.user!.user.lastName)),
-//                                                            locationName: sender.studentURL!,
-//                                                            discipline: "Udacity",
-//                                                            coordinate: CLLocationCoordinate2D(latitude: (sender.newLocationcatiolati)!, longitude: (sender.newlocationcatioLongi)!))
-//
-//            studentLocationAnnotation.append(studentLocation)
-//            mapView.addAnnotations(studentLocationAnnotation)
-//        }
-//        //currentStudentLocation()
+        refreshData()
     }
     
-    //MARK: Get Current student location information if present
-    
-    func currentStudentLocation() {
-        // Student data
-        //let urlString = "https://parse.udacity.com/parse/classes/StudentLocation?where=%7B%22uniqueKey%22%3A%22\(self.appDelegate.studentID)%22%7D"
-        let urlString = "https://parse.udacity.com/parse/classes/StudentLocation?where=%7B%22uniqueKey%22%3A%224343538699%22%7D"
-        
-        print(urlString)
-        let url = URL(string: urlString)
-        var request = URLRequest(url: url!)
-        request.addValue("QrX47CA9cyuGewLdsL7o5Eb8iug6Em8ye0dnAbIr", forHTTPHeaderField: "X-Parse-Application-Id")
-        request.addValue("QuWThTdiRmTux3YaDseUSEpUKo7aBYM737yKd4gY", forHTTPHeaderField: "X-Parse-REST-API-Key")
-        let session = URLSession.shared
-        let task = session.dataTask(with: request) { data, response, error in
-            if error != nil { // Handle error
-                return
-            }
-            do {
-                let decoder = JSONDecoder()
-                decoder.dataDecodingStrategy = .deferredToData
-                let parseResult = try decoder.decode(Student.self, from: data!)
-                if parseResult.results.count != 0 {
-                    self.appDelegate!.student.append(contentsOf: parseResult.results)
+    func refreshData() {
+        UdacityClient.sharedInstance().refreshData { (success, error) in
+            if success {
+                performUIUpdatesOnMain {
+                    self.studentTableView.reloadData()
                 }
-                
-            } catch {
-                print("Could not parse the data as JSON: '\(String(data: data!, encoding: .utf8)!)'")
-                return
+            } else {
+                print(error!)
             }
         }
-        task.resume()
-        
     }
 }
 

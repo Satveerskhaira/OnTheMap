@@ -13,13 +13,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
     
-    //Store students informations in array
-    
-    var student = [Student.Results]() 
-    var studentID : String? = nil
-    var session : String? = nil
-    var user : UserData? = nil
-    var currentUserObjectID : String?  = nil
+//    //Store students informations in array
+//    
+//    var student = [Student.Results]() 
+//    var studentID : String? = nil
+//    var session : String? = nil
+//    var user : UserData? = nil
+//    var currentUserObjectID : String?  = nil
   
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.

@@ -11,12 +11,11 @@ import MapKit
 class StoreStudentLoactionViewController: UIViewController, MKMapViewDelegate {
 
     @IBOutlet weak var mapView: MKMapView!
+    
+    // Properties
     var studentLocation :String?
     var studentURL : String?
     var matchingItems: [MKMapItem] = [MKMapItem]()
-    var newLocationcatiolati : Double?
-    var newlocationcatioLongi : Double?
-    var newLocationcationTitle : String?
     var newLocationcationDetail : StudentLocation!
     var appDelegate: UdacityClient!
     
@@ -46,12 +45,7 @@ class StoreStudentLoactionViewController: UIViewController, MKMapViewDelegate {
                     print("No matches found")
                 } else {
                     for item in res.mapItems {
-                        
-                        //Store value to
-                        self.newLocationcationTitle = item.placemark.title!
-                        self.newLocationcatiolati = item.placemark.coordinate.latitude
-                        self.newlocationcatioLongi = item.placemark.coordinate.longitude
-
+                    
                         self.newLocationcationDetail = StudentLocation(title: item.placemark.title!, latitude: item.placemark.coordinate.latitude, longitude: item.placemark.coordinate.longitude)
                         self.matchingItems.append(item as MKMapItem)
                         
@@ -75,10 +69,7 @@ class StoreStudentLoactionViewController: UIViewController, MKMapViewDelegate {
         // Dispose of any resources that can be recreated.
     }
     
-    @IBAction func back(_ sender: Any) {
-        dismiss(animated: true, completion: nil)
-    }
-    
+    // MARK : Add new location
     @IBAction func finish(_ sender: Any) {
        
         var url = "https://parse.udacity.com/parse/classes/StudentLocation"
@@ -89,8 +80,11 @@ class StoreStudentLoactionViewController: UIViewController, MKMapViewDelegate {
             method = "PUT"
             url = url + "/\(appDelegate.currentUserObjectID!)"
         }
-            
-           UdacityClient.sharedInstance().postPut(newLocationcationDetail, studentURL!, url, method: method, handlerForUpdate: { (success, error) in
+        guard let newLocation = newLocationcationDetail else {
+            print("Location not found")
+            return
+        }
+           UdacityClient.sharedInstance().postPut(newLocation, studentURL!, url, method: method, handlerForUpdate: { (success, error) in
                 if success {
                     performUIUpdatesOnMain {
                         //code for unwind and reload
@@ -101,33 +95,5 @@ class StoreStudentLoactionViewController: UIViewController, MKMapViewDelegate {
                     return
                 }
             })
-        
-    }
-    
-    func postPut (_ newLocation : StudentLocation!, _ webAddress : String, _ url: String, method : String, handlerForUpdate : @escaping (_ success :Bool, _ error : String?) -> Void ) {
-        
-        let lastName = appDelegate.user!.user.lastName
-        let firstName = appDelegate.user!.user.firstName
-        let id = appDelegate.studentID!
-        let stuURL = studentURL!
-        
-        // Calling method PUT or POST
-        
-        var request = URLRequest(url: URL(string: url)!)
-        request.httpMethod = method
-        request.addValue("QrX47CA9cyuGewLdsL7o5Eb8iug6Em8ye0dnAbIr", forHTTPHeaderField: "X-Parse-Application-Id")
-        request.addValue("QuWThTdiRmTux3YaDseUSEpUKo7aBYM737yKd4gY", forHTTPHeaderField: "X-Parse-REST-API-Key")
-        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-        
-        request.httpBody = "{\"uniqueKey\": \"\(id)\", \"firstName\": \"\(firstName)\", \"lastName\": \"\(lastName)\",\"mapString\": \"\(newLocation.title)\", \"mediaURL\": \"\(stuURL)\",\"latitude\": \(newLocation.latitude), \"longitude\": \(newLocation.longitude)}".data(using: .utf8)
-        
-        let session = URLSession.shared
-        let task = session.dataTask(with: request) { data, response, error in
-            if error != nil { // Handle error…
-                handlerForUpdate(false, error?.localizedDescription)
-            }
-                handlerForUpdate(true, nil)
-        }
-        task.resume()
     }
 }
