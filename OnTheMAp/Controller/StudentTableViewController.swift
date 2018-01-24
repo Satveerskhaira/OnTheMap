@@ -11,16 +11,11 @@ import UIKit
 class StudentTableViewController: UITableViewController {
     // Properties
     
-    var appDelegate : AppDelegate!
+    var appDelegate: UdacityClient!
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        appDelegate = UIApplication.shared.delegate as! AppDelegate
-        // Uncomment the following line to preserve selection between presentations
-        // self.clearsSelectionOnViewWillAppear = false
-
-        // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-        // self.navigationItem.rightBarButtonItem = self.editButtonItem
+        appDelegate = UdacityClient.sharedInstance()
     }
 
     override func didReceiveMemoryWarning() {
@@ -97,3 +92,57 @@ class StudentTableViewController: UITableViewController {
     */
 
 }
+
+// MARK : unwind segue
+extension StudentTableViewController {
+    
+    @IBAction func unwindSegue (segue : UIStoryboardSegue) {
+//        if let sender = segue.source as? StoreStudentLoactionViewController {
+//            print(sender.newLocationcatiolati)
+//            let studentLocation = StudentLocationAnnotation(title: ((appDelegate.user!.user.firstName) + " " + (appDelegate.user!.user.lastName)),
+//                                                            locationName: sender.studentURL!,
+//                                                            discipline: "Udacity",
+//                                                            coordinate: CLLocationCoordinate2D(latitude: (sender.newLocationcatiolati)!, longitude: (sender.newlocationcatioLongi)!))
+//
+//            studentLocationAnnotation.append(studentLocation)
+//            mapView.addAnnotations(studentLocationAnnotation)
+//        }
+//        //currentStudentLocation()
+    }
+    
+    //MARK: Get Current student location information if present
+    
+    func currentStudentLocation() {
+        // Student data
+        //let urlString = "https://parse.udacity.com/parse/classes/StudentLocation?where=%7B%22uniqueKey%22%3A%22\(self.appDelegate.studentID)%22%7D"
+        let urlString = "https://parse.udacity.com/parse/classes/StudentLocation?where=%7B%22uniqueKey%22%3A%224343538699%22%7D"
+        
+        print(urlString)
+        let url = URL(string: urlString)
+        var request = URLRequest(url: url!)
+        request.addValue("QrX47CA9cyuGewLdsL7o5Eb8iug6Em8ye0dnAbIr", forHTTPHeaderField: "X-Parse-Application-Id")
+        request.addValue("QuWThTdiRmTux3YaDseUSEpUKo7aBYM737yKd4gY", forHTTPHeaderField: "X-Parse-REST-API-Key")
+        let session = URLSession.shared
+        let task = session.dataTask(with: request) { data, response, error in
+            if error != nil { // Handle error
+                return
+            }
+            do {
+                let decoder = JSONDecoder()
+                decoder.dataDecodingStrategy = .deferredToData
+                let parseResult = try decoder.decode(Student.self, from: data!)
+                if parseResult.results.count != 0 {
+                    self.appDelegate!.student.append(contentsOf: parseResult.results)
+                }
+                
+            } catch {
+                print("Could not parse the data as JSON: '\(String(data: data!, encoding: .utf8)!)'")
+                return
+            }
+        }
+        task.resume()
+        
+    }
+}
+
+

@@ -14,7 +14,7 @@ class MapViewController: UIViewController {
     @IBOutlet weak var mapView: MKMapView!
     //properties for student array
     
-    var appDelegate: AppDelegate!
+    var appDelegate: UdacityClient!
     var studentLocationAnnotation : [StudentLocationAnnotation] = []
     
     override func viewDidLoad() {
@@ -22,7 +22,7 @@ class MapViewController: UIViewController {
         //Set Appdelegate
         
         // get the app delegate
-        appDelegate = UIApplication.shared.delegate as! AppDelegate
+        appDelegate = UdacityClient.sharedInstance()
         
         //Set MapView delegate
         mapView.delegate = self

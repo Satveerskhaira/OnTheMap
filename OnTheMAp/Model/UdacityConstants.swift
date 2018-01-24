@@ -16,30 +16,19 @@ struct Constants {
     // MARK: URLs
     static let ApiScheme = "https"
     static let ApiHost = "www.udacity.com"
-    static let ApiPath = "/api"
-    static let AuthorizationURL = "https://www.themoviedb.org/authenticate/"
-    static let AccountURL = "https://www.themoviedb.org/account/"
-}
+    static let ApiPath = "/"
+    static let Session = "session"
+    static let StudentLocation = "parse/classes/StudentLocation"
+    static let ChangeLocation = "https://parse.udacity.com/parse/classes/StudentLocation/<objectId>"
+    }
 
 // MARK: Methods
 struct Methods {
     
     // MARK: Account
-    static let Session = "/session"
-    //static let AccountIDFavoriteMovies = "/account/{id}/favorite/movies"
-    //static let AccountIDFavorite = "/account/{id}/favorite"
-    //static let AccountIDWatchlistMovies = "/account/{id}/watchlist/movies"
-    //static let AccountIDWatchlist = "/account/{id}/watchlist"
-    
-    // MARK: Authentication
-    //static let AuthenticationTokenNew = "/authentication/token/new"
-    //static let AuthenticationSessionNew = "/authentication/session/new"
-    
-    // MARK: Search
-    //static let SearchMovie = "/search/movie"
-    
-    // MARK: Config
-    //static let Config = "/configuration"
+    static let put = "PUT"
+    static let post = "POST"
+    static let delete = "DELETE"
     
 }
 

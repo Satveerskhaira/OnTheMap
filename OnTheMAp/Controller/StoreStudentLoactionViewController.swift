@@ -17,13 +17,13 @@ class StoreStudentLoactionViewController: UIViewController, MKMapViewDelegate {
     var newLocationcatiolati : Double?
     var newlocationcatioLongi : Double?
     var newLocationcationTitle : String?
-    var newLocationcationDetail : StudentLocation?
-    var appDelegate: AppDelegate!
+    var newLocationcationDetail : StudentLocation!
+    var appDelegate: UdacityClient!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         // get the app delegate
-        appDelegate = UIApplication.shared.delegate as! AppDelegate
+        appDelegate = UdacityClient.sharedInstance()
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -52,10 +52,7 @@ class StoreStudentLoactionViewController: UIViewController, MKMapViewDelegate {
                         self.newLocationcatiolati = item.placemark.coordinate.latitude
                         self.newlocationcatioLongi = item.placemark.coordinate.longitude
 
-                        self.newLocationcationDetail?.title = item.placemark.title!
-                        self.newLocationcationDetail?.latitude = item.placemark.coordinate.latitude
-                        self.newLocationcationDetail?.longitude = item.placemark.coordinate.longitude
-                        
+                        self.newLocationcationDetail = StudentLocation(title: item.placemark.title!, latitude: item.placemark.coordinate.latitude, longitude: item.placemark.coordinate.longitude)
                         self.matchingItems.append(item as MKMapItem)
                         
                         //Create one function for all Annotations
@@ -84,46 +81,52 @@ class StoreStudentLoactionViewController: UIViewController, MKMapViewDelegate {
     
     @IBAction func finish(_ sender: Any) {
        
-        let url = "https://parse.udacity.com/parse/classes/StudentLocation"
+        var url = "https://parse.udacity.com/parse/classes/StudentLocation"
+        var method = ""
         if appDelegate.currentUserObjectID == nil {
-            postPut(url, method: "POST")
+            method = "POST"
         } else  {
-            postPut(url + "/\(appDelegate.currentUserObjectID!)", method: "PUT")
+            method = "PUT"
+            url = url + "/\(appDelegate.currentUserObjectID!)"
         }
+            
+           UdacityClient.sharedInstance().postPut(newLocationcationDetail, studentURL!, url, method: method, handlerForUpdate: { (success, error) in
+                if success {
+                    performUIUpdatesOnMain {
+                        //code for unwind and reload
+                        self.performSegue(withIdentifier: "unwind", sender: self)
+                    }
+                } else  {
+                    print(error!)
+                    return
+                }
+            })
+        
     }
     
-    func postPut (_ url: String, method : String) {
+    func postPut (_ newLocation : StudentLocation!, _ webAddress : String, _ url: String, method : String, handlerForUpdate : @escaping (_ success :Bool, _ error : String?) -> Void ) {
+        
         let lastName = appDelegate.user!.user.lastName
         let firstName = appDelegate.user!.user.firstName
-        let title = newLocationcationTitle!
-        let lati = newLocationcatiolati!
-        let longi = newlocationcatioLongi!
         let id = appDelegate.studentID!
         let stuURL = studentURL!
         
         // Calling method PUT or POST
         
-       // var request = URLRequest(url: URL(string: "https://parse.udacity.com/parse/classes/StudentLocation")!)
         var request = URLRequest(url: URL(string: url)!)
-        //request.httpMethod = "POST"
         request.httpMethod = method
         request.addValue("QrX47CA9cyuGewLdsL7o5Eb8iug6Em8ye0dnAbIr", forHTTPHeaderField: "X-Parse-Application-Id")
         request.addValue("QuWThTdiRmTux3YaDseUSEpUKo7aBYM737yKd4gY", forHTTPHeaderField: "X-Parse-REST-API-Key")
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         
-        request.httpBody = "{\"uniqueKey\": \"\(id)\", \"firstName\": \"\(firstName)\", \"lastName\": \"\(lastName)\",\"mapString\": \"\(title)\", \"mediaURL\": \"\(stuURL)\",\"latitude\": \(lati), \"longitude\": \(longi)}".data(using: .utf8)
+        request.httpBody = "{\"uniqueKey\": \"\(id)\", \"firstName\": \"\(firstName)\", \"lastName\": \"\(lastName)\",\"mapString\": \"\(newLocation.title)\", \"mediaURL\": \"\(stuURL)\",\"latitude\": \(newLocation.latitude), \"longitude\": \(newLocation.longitude)}".data(using: .utf8)
         
         let session = URLSession.shared
         let task = session.dataTask(with: request) { data, response, error in
             if error != nil { // Handle error…
-                return
+                handlerForUpdate(false, error?.localizedDescription)
             }
-            //print(String(data: data!, encoding: .utf8)!)
-            
-            performUIUpdatesOnMain {
-                //code for unwind and reload
-                self.performSegue(withIdentifier: "unwind", sender: self)
-            }
+                handlerForUpdate(true, nil)
         }
         task.resume()
     }

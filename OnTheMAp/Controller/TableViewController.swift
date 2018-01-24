@@ -9,13 +9,13 @@
 import UIKit
 
 class TableViewController: UIViewController {
-    var appDelegate = AppDelegate()
+    var appDelegate: UdacityClient!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         //setup appdelegate
-        appDelegate = UIApplication.shared.delegate as! AppDelegate
+        appDelegate = UdacityClient.sharedInstance()
         
         // Setup up logout button in navigation control
         
