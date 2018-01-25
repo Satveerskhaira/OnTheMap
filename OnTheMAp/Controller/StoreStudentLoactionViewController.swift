@@ -18,7 +18,7 @@ class StoreStudentLoactionViewController: UIViewController, MKMapViewDelegate {
     var matchingItems: [MKMapItem] = [MKMapItem]()
     var newLocationcationDetail : StudentLocation!
     var appDelegate: UdacityClient!
-    
+     let regionRadius: CLLocationDistance = 1000000
     override func viewDidLoad() {
         super.viewDidLoad()
         // get the app delegate
@@ -54,6 +54,7 @@ class StoreStudentLoactionViewController: UIViewController, MKMapViewDelegate {
                         annotation.coordinate = item.placemark.coordinate
                         annotation.title = item.name
                         self.mapView.addAnnotation(annotation)
+                        self.centerMapOnLocation(location: CLLocation.init(latitude: item.placemark.coordinate.latitude, longitude: item.placemark.coordinate.longitude))
                         break
                     }
                 }
@@ -64,6 +65,14 @@ class StoreStudentLoactionViewController: UIViewController, MKMapViewDelegate {
             }
         }
     }
+    
+    
+    func centerMapOnLocation(location: CLLocation) {
+        let coordinateRegion = MKCoordinateRegionMakeWithDistance(location.coordinate,
+                                                                  regionRadius, regionRadius)
+        mapView.setRegion(coordinateRegion, animated: true)
+    }
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.

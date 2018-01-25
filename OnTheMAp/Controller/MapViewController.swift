@@ -32,22 +32,6 @@ class MapViewController: UIViewController {
         
         // Add annotations
         addAnnotation()
-//        for student in (appDelegate.student) {
-//            if student.firstName == nil || student.lastName == nil || student.latitude == nil  || student.longitude == nil {
-//                print("Data with error \(student)")
-//            } else {
-//
-//            let studentLocation = StudentLocationAnnotation(title: ((student.firstName)! + " " + (student.lastName)!),
-//                                                            locationName: student.mediaURL!,
-//                                                    discipline: "Udacity",
-//                                                    coordinate: CLLocationCoordinate2D(latitude: (student.latitude)!, longitude: (student.longitude)!))
-//
-//            studentLocationAnnotation.append(studentLocation)
-//            }
-//        }
-//
-//        mapView.addAnnotations(studentLocationAnnotation)
-        
     }
 
     
@@ -146,6 +130,7 @@ extension MapViewController {
             if success {
                 performUIUpdatesOnMain {
                     self.mapView.removeAnnotations(self.studentLocationAnnotation)
+                    self.studentLocationAnnotation.removeAll()
                 }
                 performUIUpdatesOnMain {
                     self.addAnnotation()

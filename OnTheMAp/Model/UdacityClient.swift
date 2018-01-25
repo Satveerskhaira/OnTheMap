@@ -70,6 +70,7 @@ class UdacityClient: NSObject {
         // Remove old data
         student.removeAll()
         // reload data
+        
         self.studentData { (success, error) in
             if success {
                 self.currentStudentLocation(handlerForCurrentStuLocation: { (success, error) in
@@ -279,7 +280,7 @@ class UdacityClient: NSObject {
             }
             let range = Range(5..<data!.count)
             guard let newData = data?.subdata(in: range) /* subset response data! */ else {
-                handlerForLogout(false, error?.localizedDescription)
+                handlerForLogout(true, error?.localizedDescription)
                 return
             }
             handlerForLogout(true, nil)
