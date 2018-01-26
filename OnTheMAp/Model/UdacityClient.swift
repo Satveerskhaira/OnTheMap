@@ -293,24 +293,6 @@ class UdacityClient: NSObject {
         }
         task.resume()
     }
-    
-
-    // MARK : create a URL from parameters
-    func udacityURLWithParameter(_ parameters: [String:AnyObject], withPathExtension: String? = nil) -> URL {
-        
-        var components = URLComponents()
-        components.scheme = Constants.ApiScheme
-        components.host = Constants.ApiHost
-        components.path = Constants.ApiPath + (withPathExtension ?? "")
-        components.queryItems = [URLQueryItem]()
-        
-        for (key, value) in parameters {
-            let queryItem = URLQueryItem(name: key, value: "\(value)")
-            components.queryItems!.append(queryItem)
-        }
-        
-        return components.url!
-    }
 
     
     // MARK: Shared Instance
