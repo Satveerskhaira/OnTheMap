@@ -59,8 +59,12 @@ class UdacityClient: NSObject {
                                 handlerForAuth(false, error)
                             }
                         })
+                    } else {
+                        handlerForAuth(false, error)
                     }
                 })
+            } else {
+                handlerForAuth(false, error)
             }
         }
     }
@@ -92,8 +96,8 @@ class UdacityClient: NSObject {
     func getSession(_ name : String, _ pwd : String, _ handlerForSession : @escaping (_ success : Bool, _ errorString : String?) -> Void) {
         
         //User name
-        let name = "satveersingh@outlook.com"
-        let pwd = "kherasatveer"
+       // let name = "satveersingh@outlook.com"
+       // let pwd = "kherasatveer"
         
         if !(name.isEmpty)  && !(pwd.isEmpty) {
             
@@ -125,9 +129,9 @@ class UdacityClient: NSObject {
                 } catch {
                     do {
                         let parseError = try decoder.decode(UdacityError.self, from: newData!)
-                        handlerForSession(false, "Could not parse the data as JSON: '\(parseError)'")
+                        handlerForSession(false, parseError.error)
                     } catch {
-                        handlerForSession(false, "Could not parse the data as JSON: '\(data!)'")
+                        handlerForSession(false, "Could not connect with Udacity")
                     }
                 }
             }
@@ -140,7 +144,8 @@ class UdacityClient: NSObject {
     func studentData(handlerForstudentData :@escaping (_ success : Bool, _ error : String?) -> Void) {
         
         // Student data
-        let urlString = "https://parse.udacity.com/parse/classes/StudentLocation"
+        //let urlString = "https://parse.udacity.com/parse/classes/StudentLocation"
+        let urlString = "https://parse.udacity.com/parse/classes/StudentLocation?order=-updatedAt"
         let url = URL(string: urlString)
         var request = URLRequest(url: url!)
         request.addValue("QrX47CA9cyuGewLdsL7o5Eb8iug6Em8ye0dnAbIr", forHTTPHeaderField: "X-Parse-Application-Id")
@@ -158,7 +163,7 @@ class UdacityClient: NSObject {
                 self.student.append(contentsOf: parseResult.results)
                 handlerForstudentData(true, nil)
             } catch {
-                handlerForstudentData(true, "Could not parse the data as JSON: '\(String(data: data!, encoding: .utf8)!)'")
+                handlerForstudentData(true, "Could not load data from Udacity network")
             }
         }
         task.resume()
@@ -226,7 +231,7 @@ class UdacityClient: NSObject {
                 self.user = parseResult
                handlerForCurrentStuData(true, nil)
             } catch {
-                handlerForCurrentStuData(false, "Could not parse the data as JSON: '\(String(data: data!, encoding: .utf8)!)'")
+                handlerForCurrentStuData(false, "User not found in udacity account")
             }
         }
         task.resume()

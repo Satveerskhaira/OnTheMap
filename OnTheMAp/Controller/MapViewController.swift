@@ -39,11 +39,15 @@ class MapViewController: UIViewController {
     }
     
     @objc func logout() {
+        updateUI(false, 0.5, false)
         UdacityClient.sharedInstance().logout { (success, error) in
             if success {
                 self.dismiss(animated: true, completion: nil)
+                
             } else {
-                print(error!)
+                self.showAlert(error!, alertTitle: "Logout Failed", action: false, addLocationSegue: { (success) in
+                    // No Action
+                })
             }
         }
     }
@@ -68,7 +72,7 @@ class MapViewController: UIViewController {
         
         for student in (appDelegate.student) {
             if student.firstName == nil || student.lastName == nil || student.latitude == nil  || student.longitude == nil {
-                print("Data with error \(student)")
+                // Do nothing
             } else {
                 
                 let studentLocation = StudentLocationAnnotation(title: ((student.firstName)! + " " + (student.lastName)!),
@@ -133,6 +137,7 @@ extension MapViewController {
     //MARK: Get Current student location information if present
     
     func refreshData() {
+        updateUI(false, 0.5, false)
         mapView.isUserInteractionEnabled = false
         activity(myActivityIndicator, false)
         UdacityClient.sharedInstance().refreshData { (success, error) in
@@ -141,14 +146,25 @@ extension MapViewController {
                     self.mapView.removeAnnotations(self.studentLocationAnnotation)
                     self.studentLocationAnnotation.removeAll()
                 }
-                performUIUpdatesOnMain {
-                    self.addAnnotation()
-                    self.mapView.isUserInteractionEnabled = true
-                    self.activity(self.myActivityIndicator, true)
-                }
+                self.updateUI(true, 1.0, true)
             } else {
-                print(error!)
+                performUIUpdatesOnMain({
+                    self.showAlert(error!, alertTitle: "Error Load Data from Network", action: false, addLocationSegue: { (success) in
+                        // Do Nothing
+                    })
+                })
             }
+        }
+    }
+    
+    func updateUI(_ intractionEnabled : Bool, _ alpha : CGFloat, _ annotationAdd : Bool ) {
+        performUIUpdatesOnMain {
+            if annotationAdd {
+               self.addAnnotation()
+            }
+            self.mapView.isUserInteractionEnabled = intractionEnabled
+            self.mapView.alpha = alpha
+            self.activity(self.myActivityIndicator, intractionEnabled)
         }
     }
 }

@@ -18,7 +18,7 @@ class StoreStudentLoactionViewController: UIViewController, MKMapViewDelegate {
     var matchingItems: [MKMapItem] = [MKMapItem]()
     var newLocationcationDetail : StudentLocation!
     var appDelegate: UdacityClient!
-     let regionRadius: CLLocationDistance = 1000000
+    let regionRadius: CLLocationDistance = 1000000
     override func viewDidLoad() {
         super.viewDidLoad()
         // get the app delegate
@@ -40,11 +40,15 @@ class StoreStudentLoactionViewController: UIViewController, MKMapViewDelegate {
         search.start { (respone, error) in
             if error == nil {
                 guard let res = respone else {
-                    print("Response not recieved")
+                    self.showAlert("Network issue while finding Location", alertTitle: "Location", action: false, addLocationSegue: { (success) in
+                        // No action
+                    })
                     return
                 }
                 if res.mapItems.count == 0 {
-                    print("No matches found")
+                    self.showAlert("Location not found", alertTitle: "Location", action: false, addLocationSegue: { (success) in
+                        // No action
+                    })
                 } else {
                     for item in res.mapItems {
                     
@@ -62,7 +66,9 @@ class StoreStudentLoactionViewController: UIViewController, MKMapViewDelegate {
                 }
             }
             else {
-                print("error occured while searching \(String(describing: error?.localizedDescription))")
+                self.showAlert("Could not Geocode the string", alertTitle: "Location not found", action: false, addLocationSegue: { (success) in
+                    // No action
+                })
                 return
             }
         }

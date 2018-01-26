@@ -49,8 +49,9 @@ class AddLocationViewController: UIViewController {
                         let storeStudentLocation = segue.destination as! StoreStudentLoactionViewController
                         storeStudentLocation.studentLocation = newLocation.text
                         storeStudentLocation.studentURL = studentURL.text
+                        
                     } else {
-                        // Invalid web e
+                        // Invalid web address
                         
                         self.showAlert("Blank or Invalid Web Address", alertTitle: "Invalid", action: false) {(success) in
                             //Do nothing
@@ -100,11 +101,13 @@ extension AddLocationViewController: UITextFieldDelegate {
     // MARK : shift View to enter text in bottom field
     
     func textFieldDidBeginEditing(_ textField: UITextField) {
-        subscribeToKeyboardNotifications()
+        if UIDevice.current.orientation.isLandscape {
+            subscribeToKeyboardNotifications()
+        }
     }
     
     func textFieldDidEndEditing(_ textField: UITextField, reason: UITextFieldDidEndEditingReason) {
-        unsubscribeFromKeyboardNotifications()
+            unsubscribeFromKeyboardNotifications()
     }
     // MARK: Show/Hide Keyboard
     

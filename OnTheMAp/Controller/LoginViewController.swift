@@ -33,13 +33,19 @@ class LoginViewController: UIViewController {
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        configureBackground()
+        //configureBackground()
     }
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
     
+    @IBAction func signUp(_ sender: Any) {
+        let app = UIApplication.shared
+        if let url = URL(string: "https://auth.udacity.com/sign-up") {
+            app.open(url, options: [:], completionHandler: nil)
+        }
+    }
     @IBAction func logIN(_ sender: Any) {
         
         let name = userName.text!
@@ -50,17 +56,23 @@ class LoginViewController: UIViewController {
                 //Do nothing
             }
         } else {
-            setUIEnabled(false)
-            activity(myActivityIndicator, false)
+            performUIUpdatesOnMain({
+                self.setUIEnabled(false)
+                self.activity(self.myActivityIndicator, false)
+            })
+            
             UdacityClient.sharedInstance().authenticateWithViewController(name, pwd, self) { (success, error) in
                 if success {
                     self.completeLogin()
                 } else {
-                    self.setUIEnabled(true)
-                    self.activity(self.myActivityIndicator, true)
-                    self.showAlert("User Name or Password are not correct", alertTitle: "Login Fail", action: false) {(success) in
-                        //Do nothing
-                    }
+                    performUIUpdatesOnMain({
+                        self.setUIEnabled(true)
+                        self.activity(self.myActivityIndicator, true)
+                        self.showAlert(error!, alertTitle: "Login Failed", action: false) {(success) in
+                            //Do nothing
+                        }
+                    })
+                    
                 }
             }
         }
@@ -132,7 +144,10 @@ extension LoginViewController: UITextFieldDelegate {
     // MARK : shift View to enter text in bottom field
     
     func textFieldDidBeginEditing(_ textField: UITextField) {
-        subscribeToKeyboardNotifications()
+        if UIDevice.current.orientation.isLandscape {
+            subscribeToKeyboardNotifications()
+        }
+        
     }
     
     func textFieldDidEndEditing(_ textField: UITextField, reason: UITextFieldDidEndEditingReason) {
@@ -201,7 +216,6 @@ extension UIViewController {
     // Shoe Activity Indictor
     func activityIndicator(_ myActivityIndicator : UIActivityIndicatorView) {
         //Create Activity Indicator
-        //let myActivityIndicator = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.gray)
         myActivityIndicator.activityIndicatorViewStyle = .gray
         // Position Activity Indicator in the center of the main view
         myActivityIndicator.center = view.center

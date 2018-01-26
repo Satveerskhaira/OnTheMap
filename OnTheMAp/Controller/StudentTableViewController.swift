@@ -67,6 +67,7 @@ class StudentTableViewController: UITableViewController {
     // MARK : Logout
     
     @objc func logout() {
+        updateUI(false, 0.5, false)
         UdacityClient.sharedInstance().logout { (success, error) in
             if success {
                 self.dismiss(animated: true, completion: nil)
@@ -103,18 +104,25 @@ extension StudentTableViewController {
     }
     
     func refreshData() {
-        studentTableView.isUserInteractionEnabled = false
-        activity(myActivityIndicator, false)
+        updateUI(false, 0.5, false)
+        
         UdacityClient.sharedInstance().refreshData { (success, error) in
             if success {
-                performUIUpdatesOnMain {
-                    self.studentTableView.reloadData()
-                    self.studentTableView.isUserInteractionEnabled = true
-                    self.activity(self.myActivityIndicator, true)
-                }
+                self.updateUI(true, 1.0, true)
             } else {
                 print(error!)
             }
+        }
+    }
+    
+    func updateUI(_ intractionEnabled : Bool, _ alpha : CGFloat, _ tableReload : Bool ) {
+        performUIUpdatesOnMain {
+            if tableReload {
+                self.studentTableView.reloadData()
+            }
+            self.studentTableView.isUserInteractionEnabled = intractionEnabled
+            self.studentTableView.alpha = alpha
+            self.activity(self.myActivityIndicator, intractionEnabled)
         }
     }
 }

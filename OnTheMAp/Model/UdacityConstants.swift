@@ -9,7 +9,7 @@
 import Foundation
 
 struct Constants {
-    
+    // Not needed
     // MARK: API Key
     static let ApiKey = "f37d9be069406a7592ea952c11e34d09"
     
