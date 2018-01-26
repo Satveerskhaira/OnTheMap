@@ -33,11 +33,10 @@
                         <viewLayoutGuide key="safeArea" id="PQr-Ze-W5v"/>
                     </view>
                     <navigationItem key="navigationItem" title="On The Map" id="CEL-gQ-fPv">
-                        <barButtonItem key="leftBarButtonItem" title="LOGOUT" id="KDx-av-SbD"/>
                         <rightBarButtonItems>
                             <barButtonItem systemItem="add" id="VL5-EH-Vop">
                                 <connections>
-                                    <segue destination="Wy4-pv-qe0" kind="show" id="tpg-Zn-2SD"/>
+                                    <action selector="addNewLocation:" destination="9pv-A4-QxB" id="vsr-Fe-N8Y"/>
                                 </connections>
                             </barButtonItem>
                             <barButtonItem systemItem="refresh" id="E5C-ee-1ga">
@@ -49,6 +48,7 @@
                     </navigationItem>
                     <connections>
                         <outlet property="mapView" destination="SMa-LA-bjg" id="7Oh-MR-LnB"/>
+                        <segue destination="Wy4-pv-qe0" kind="show" identifier="Add" id="GgZ-Zh-VI0"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="W5J-7L-Pyd" sceneMemberID="firstResponder"/>
@@ -63,32 +63,29 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="18" translatesAutoresizingMaskIntoConstraints="NO" id="5Rj-0X-syb">
-                                <rect key="frame" x="59" y="258" width="272" height="126"/>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="5Rj-0X-syb">
+                                <rect key="frame" x="52" y="280.5" width="272" height="106"/>
                                 <subviews>
                                     <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Enter Location" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="CJe-Lg-nKT">
                                         <rect key="frame" x="0.0" y="0.0" width="272" height="30"/>
                                         <constraints>
-                                            <constraint firstAttribute="width" constant="272" id="0P1-wc-mQl"/>
+                                            <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="272" id="TOk-Lj-Yth"/>
                                         </constraints>
                                         <nil key="textColor"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <textInputTraits key="textInputTraits"/>
                                     </textField>
                                     <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" usesAttributedText="YES" borderStyle="roundedRect" placeholder="Enter Site" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="6fc-qM-j01">
-                                        <rect key="frame" x="0.0" y="48" width="272" height="30"/>
+                                        <rect key="frame" x="0.0" y="38" width="272" height="30"/>
                                         <constraints>
-                                            <constraint firstAttribute="width" constant="272" id="w4A-GN-Sdl"/>
+                                            <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="272" id="o6G-XM-njX"/>
                                         </constraints>
                                         <attributedString key="attributedText"/>
                                         <textInputTraits key="textInputTraits" keyboardType="URL" textContentType="url"/>
                                     </textField>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="qf5-BE-8QO">
-                                        <rect key="frame" x="0.0" y="96" width="272" height="30"/>
+                                        <rect key="frame" x="0.0" y="76" width="272" height="30"/>
                                         <color key="backgroundColor" red="0.26854035609999999" green="0.75369272440000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
-                                        <constraints>
-                                            <constraint firstAttribute="width" constant="272" id="iPF-bI-h1p"/>
-                                        </constraints>
                                         <state key="normal" title="Find Location">
                                             <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         </state>
@@ -100,11 +97,15 @@
                             </stackView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <gestureRecognizers/>
                         <constraints>
-                            <constraint firstItem="hn5-FA-Fzn" firstAttribute="top" secondItem="5Rj-0X-syb" secondAttribute="bottom" constant="-320" id="4zd-vM-Eug"/>
-                            <constraint firstItem="5Rj-0X-syb" firstAttribute="leading" secondItem="hn5-FA-Fzn" secondAttribute="trailing" constant="-316" id="yir-Iu-vUC"/>
+                            <constraint firstItem="5Rj-0X-syb" firstAttribute="centerX" secondItem="jEz-sb-uYF" secondAttribute="centerX" id="fkS-ic-PNZ"/>
+                            <constraint firstItem="5Rj-0X-syb" firstAttribute="centerY" secondItem="jEz-sb-uYF" secondAttribute="centerY" id="nai-fC-H2w"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="hn5-FA-Fzn"/>
+                        <connections>
+                            <outletCollection property="gestureRecognizers" destination="XfQ-OL-Pca" appends="YES" id="WjV-Je-JI0"/>
+                        </connections>
                     </view>
                     <navigationItem key="navigationItem" title="Add Location" largeTitleDisplayMode="never" id="hoq-0N-9mB"/>
                     <connections>
@@ -113,6 +114,11 @@
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="xyO-6D-Uaq" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <tapGestureRecognizer id="XfQ-OL-Pca">
+                    <connections>
+                        <action selector="userDidTapView:" destination="Wy4-pv-qe0" id="17P-ts-j1U"/>
+                    </connections>
+                </tapGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="3240.8000000000002" y="-121.88905547226388"/>
         </scene>
@@ -127,10 +133,13 @@
                             <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="6ga-El-UO8">
                                 <rect key="frame" x="0.0" y="64" width="375" height="603"/>
                             </mapView>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="eqM-eo-bW2">
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="eqM-eo-bW2">
                                 <rect key="frame" x="16" y="617" width="343" height="30"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" red="0.26854035607192073" green="0.75369272443598034" blue="1" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="30" id="3Vp-mZ-P4M"/>
+                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="343" id="Y4q-4T-P8Q"/>
+                                </constraints>
                                 <state key="normal" title="Finish">
                                     <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 </state>
@@ -154,9 +163,11 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
+                            <constraint firstItem="eqM-eo-bW2" firstAttribute="top" secondItem="tIT-rT-b37" secondAttribute="bottom" constant="-50" id="LVY-CA-1fz"/>
                             <constraint firstItem="6ga-El-UO8" firstAttribute="bottom" secondItem="tIT-rT-b37" secondAttribute="bottom" id="Y4e-TR-f6q"/>
                             <constraint firstItem="6ga-El-UO8" firstAttribute="top" secondItem="tIT-rT-b37" secondAttribute="top" id="Zej-fb-X1Q"/>
                             <constraint firstItem="6ga-El-UO8" firstAttribute="leading" secondItem="Uh3-N7-1ze" secondAttribute="leading" id="dKn-X2-SVv"/>
+                            <constraint firstItem="eqM-eo-bW2" firstAttribute="centerX" secondItem="Uh3-N7-1ze" secondAttribute="centerX" id="fSx-ZN-3XO"/>
                             <constraint firstAttribute="trailing" secondItem="6ga-El-UO8" secondAttribute="trailing" id="ywP-yo-EbB"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="tIT-rT-b37"/>
@@ -172,7 +183,7 @@
             </objects>
             <point key="canvasLocation" x="4068" y="-122.78860569715144"/>
         </scene>
-        <!--Title-->
+        <!--On The Map-->
         <scene sceneID="va8-Vc-fgv">
             <objects>
                 <tableViewController id="qwp-HI-apq" customClass="StudentTableViewController" customModule="OnTheMAp" customModuleProvider="target" sceneMemberID="viewController">
@@ -211,12 +222,11 @@
                             <outlet property="delegate" destination="qwp-HI-apq" id="5SG-8p-VPx"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" title="Title" id="l2a-ZG-kvx">
-                        <barButtonItem key="leftBarButtonItem" title="LOGOUT" id="9kz-Ul-hdy"/>
+                    <navigationItem key="navigationItem" title="On The Map" id="l2a-ZG-kvx">
                         <rightBarButtonItems>
                             <barButtonItem systemItem="add" id="2pA-en-XTb">
                                 <connections>
-                                    <segue destination="Wy4-pv-qe0" kind="show" id="jDT-Qj-qKq"/>
+                                    <action selector="addNewLocation:" destination="qwp-HI-apq" id="KVx-ZA-bDG"/>
                                 </connections>
                             </barButtonItem>
                             <barButtonItem systemItem="refresh" id="DsI-S5-AEi">
@@ -228,6 +238,7 @@
                     </navigationItem>
                     <connections>
                         <outlet property="studentTableView" destination="FRT-Mk-BzS" id="lS5-9a-xxx"/>
+                        <segue destination="Wy4-pv-qe0" kind="show" identifier="Add" id="1KS-zb-mg7"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="7Zc-CL-zG3" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -259,7 +270,7 @@
                                             <constraint firstAttribute="height" constant="40" id="MJH-8Y-Q8d"/>
                                         </constraints>
                                         <attributedString key="attributedText"/>
-                                        <textInputTraits key="textInputTraits" textContentType="password"/>
+                                        <textInputTraits key="textInputTraits" secureTextEntry="YES" textContentType="password"/>
                                     </textField>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hTE-bb-hJc">
                                         <rect key="frame" x="0.0" y="96" width="242" height="30"/>
@@ -290,11 +301,15 @@
                             </stackView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <gestureRecognizers/>
                         <constraints>
                             <constraint firstItem="6yP-42-XvR" firstAttribute="centerX" secondItem="SDl-D3-N2G" secondAttribute="centerX" id="7UD-oY-X46"/>
                             <constraint firstItem="6yP-42-XvR" firstAttribute="centerY" secondItem="SDl-D3-N2G" secondAttribute="centerY" id="iRz-px-ffn"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="SDl-D3-N2G"/>
+                        <connections>
+                            <outletCollection property="gestureRecognizers" destination="fxw-lm-vAj" appends="YES" id="ZCd-gr-cDn"/>
+                        </connections>
                     </view>
                     <connections>
                         <outlet property="loginButton" destination="hTE-bb-hJc" id="iMA-cN-Dac"/>
@@ -303,8 +318,13 @@
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Gac-ci-cXa" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <tapGestureRecognizer id="fxw-lm-vAj">
+                    <connections>
+                        <action selector="userDidTapView:" destination="8Ld-jj-Vzb" id="pSI-ND-CTS"/>
+                    </connections>
+                </tapGestureRecognizer>
             </objects>
-            <point key="canvasLocation" x="-1241" y="7"/>
+            <point key="canvasLocation" x="-1242.4000000000001" y="6.746626686656672"/>
         </scene>
         <!--Tab Bar Controller-->
         <scene sceneID="yl2-sM-qoP">
@@ -368,6 +388,6 @@
         <image name="second" width="30" height="30"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="tpg-Zn-2SD"/>
+        <segue reference="1KS-zb-mg7"/>
     </inferredMetricsTieBreakers>
 </document>

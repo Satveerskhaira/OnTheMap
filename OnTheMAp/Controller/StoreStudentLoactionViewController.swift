@@ -26,6 +26,8 @@ class StoreStudentLoactionViewController: UIViewController, MKMapViewDelegate {
     }
     
     override func viewDidAppear(_ animated: Bool) {
+        
+        super.viewDidAppear(animated)
         // Do any additional setup after loading the view.
         let searchLocation = MKLocalSearchRequest()
         searchLocation.naturalLanguageQuery = studentLocation
@@ -66,7 +68,7 @@ class StoreStudentLoactionViewController: UIViewController, MKMapViewDelegate {
         }
     }
     
-    
+
     func centerMapOnLocation(location: CLLocation) {
         let coordinateRegion = MKCoordinateRegionMakeWithDistance(location.coordinate,
                                                                   regionRadius, regionRadius)
@@ -80,20 +82,24 @@ class StoreStudentLoactionViewController: UIViewController, MKMapViewDelegate {
     
     // MARK : Add new location
     @IBAction func finish(_ sender: Any) {
-       
-        var url = "https://parse.udacity.com/parse/classes/StudentLocation"
-        var method = ""
-        if appDelegate.currentUserObjectID == nil {
-            method = "POST"
-        } else  {
-            method = "PUT"
-            url = url + "/\(appDelegate.currentUserObjectID!)"
-        }
-        guard let newLocation = newLocationcationDetail else {
-            print("Location not found")
-            return
-        }
-           UdacityClient.sharedInstance().postPut(newLocation, studentURL!, url, method: method, handlerForUpdate: { (success, error) in
+        if matchingItems.count == 0 {
+            self.showAlert("Location not found", alertTitle: "New Location", action: false) {(success) in
+                //Do nothing
+            }
+        } else {
+            var url = "https://parse.udacity.com/parse/classes/StudentLocation"
+            var method = ""
+            if appDelegate.currentUserObjectID == nil {
+                method = "POST"
+            } else  {
+                method = "PUT"
+                url = url + "/\(appDelegate.currentUserObjectID!)"
+            }
+            guard let newLocation = newLocationcationDetail else {
+                print("Location not found")
+                return
+            }
+            UdacityClient.sharedInstance().postPut(newLocation, studentURL!, url, method: method, handlerForUpdate: { (success, error) in
                 if success {
                     performUIUpdatesOnMain {
                         //code for unwind and reload
@@ -104,5 +110,8 @@ class StoreStudentLoactionViewController: UIViewController, MKMapViewDelegate {
                     return
                 }
             })
-    }
+        }
+        }
+       
 }
+

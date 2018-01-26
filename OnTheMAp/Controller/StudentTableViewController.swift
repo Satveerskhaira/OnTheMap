@@ -14,14 +14,16 @@ class StudentTableViewController: UITableViewController {
     
     
     var appDelegate: UdacityClient!
-    
+     var myActivityIndicator = UIActivityIndicatorView()
     override func viewDidLoad() {
         super.viewDidLoad()
         appDelegate = UdacityClient.sharedInstance()
         
         // create and set logout button
         navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .reply, target: self, action: #selector(logout))
-
+        
+        //Create Activity Indicator
+        activityIndicator(myActivityIndicator)
     }
 
     override func didReceiveMemoryWarning() {
@@ -29,6 +31,16 @@ class StudentTableViewController: UITableViewController {
         // Dispose of any resources that can be recreated.
     }
 
+    @IBAction func addNewLocation(_ sender: Any) {
+        if (appDelegate.user != nil) {
+            showAlert("Student Location Already present. Do you want to override location", alertTitle: "Add Location", action: true, addLocationSegue: { (success) in
+                if success {
+                    self.performSegue(withIdentifier: "Add", sender: self)
+                }
+            })
+        }
+    }
+    
     // MARK: - Table view data source
 
     override func numberOfSections(in tableView: UITableView) -> Int {
@@ -91,10 +103,14 @@ extension StudentTableViewController {
     }
     
     func refreshData() {
+        studentTableView.isUserInteractionEnabled = false
+        activity(myActivityIndicator, false)
         UdacityClient.sharedInstance().refreshData { (success, error) in
             if success {
                 performUIUpdatesOnMain {
                     self.studentTableView.reloadData()
+                    self.studentTableView.isUserInteractionEnabled = true
+                    self.activity(self.myActivityIndicator, true)
                 }
             } else {
                 print(error!)
@@ -102,5 +118,6 @@ extension StudentTableViewController {
         }
     }
 }
+
 
 

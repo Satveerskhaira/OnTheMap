@@ -46,6 +46,7 @@ class UdacityClient: NSObject {
                         self.currentStudentLocation(handlerForCurrentStuLocation: { (success, error) in
                             if success {
                                 //No action
+                               // handlerForAuth(true, nil)
                             }
                             if error != nil {
                                 print(error!)

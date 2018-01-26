@@ -16,7 +16,7 @@ class MapViewController: UIViewController {
     
     var appDelegate: UdacityClient!
     var studentLocationAnnotation : [StudentLocationAnnotation] = []
-    
+    var myActivityIndicator = UIActivityIndicatorView()
     override func viewDidLoad() {
         super.viewDidLoad()
         //Set Appdelegate
@@ -30,19 +30,13 @@ class MapViewController: UIViewController {
         // create and set logout button
         navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .reply, target: self, action: #selector(logout))
         
+       //Create Activity Indicator
+        activityIndicator(myActivityIndicator)
+        
         // Add annotations
         addAnnotation()
+       
     }
-
-    
-    let regionRadius: CLLocationDistance = 1000000
-    
-    func centerMapOnLocation(location: CLLocation) {
-        let coordinateRegion = MKCoordinateRegionMakeWithDistance(location.coordinate,
-                                                                  regionRadius, regionRadius)
-        mapView.setRegion(coordinateRegion, animated: true)
-    }
-    
     
     @objc func logout() {
         UdacityClient.sharedInstance().logout { (success, error) in
@@ -51,6 +45,15 @@ class MapViewController: UIViewController {
             } else {
                 print(error!)
             }
+        }
+    }
+    @IBAction func addNewLocation(_ sender: Any) {
+        if (appDelegate.user != nil) {
+            showAlert("Student Location Already present. Do you want to override location", alertTitle: "Add Location", action: true, addLocationSegue: { (success) in
+                if success {
+                    self.performSegue(withIdentifier: "Add", sender: self)
+                }
+            })
         }
     }
     
@@ -81,6 +84,8 @@ class MapViewController: UIViewController {
     }
 }
 
+
+// MARK : MapView Delegate
 extension MapViewController: MKMapViewDelegate {
     // 1
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
@@ -116,16 +121,20 @@ extension MapViewController: MKMapViewDelegate {
     }
 }
 
-// MARK : unwind segue
+// MARK : Navigation
 extension MapViewController {
     
+    // UnWind
     @IBAction func unwindSegue (segue : UIStoryboardSegue) {
+        
         refreshData()
     }
     
     //MARK: Get Current student location information if present
     
     func refreshData() {
+        mapView.isUserInteractionEnabled = false
+        activity(myActivityIndicator, false)
         UdacityClient.sharedInstance().refreshData { (success, error) in
             if success {
                 performUIUpdatesOnMain {
@@ -134,6 +143,8 @@ extension MapViewController {
                 }
                 performUIUpdatesOnMain {
                     self.addAnnotation()
+                    self.mapView.isUserInteractionEnabled = true
+                    self.activity(self.myActivityIndicator, true)
                 }
             } else {
                 print(error!)
@@ -141,4 +152,7 @@ extension MapViewController {
         }
     }
 }
+
+
+
 
