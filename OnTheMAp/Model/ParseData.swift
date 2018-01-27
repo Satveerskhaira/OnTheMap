@@ -8,6 +8,7 @@
 
 import Foundation
 
+// MARK : Model to parse student location data from JSON
 struct Student : Decodable {
     let results : [Results]
     
@@ -27,7 +28,7 @@ struct Student : Decodable {
     }
 }
 
-//
+// MARK : Model to parse session data from JSON
 struct Udacity :Decodable {
 
  let account : Account
@@ -43,16 +44,16 @@ struct Udacity :Decodable {
     
     struct Session : Decodable {
         let id : String
-        //let expiratio : String
+        
     }
 }
-
+// MARK : Model to parse error data from JSON
 struct UdacityError : Decodable {
     let status : Int
     let error : String
 }
 
-//Current user name
+// MARK : Model to parse current student data from JSON
 struct UserData : Decodable {
     
     let user : User

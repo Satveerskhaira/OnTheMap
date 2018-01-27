@@ -9,6 +9,7 @@
 import Foundation
 import MapKit
 
+// MARK : StudentLocationAnnotation class to create MKAnnotation on mapview
 class StudentLocationAnnotation: NSObject, MKAnnotation {
     let title: String?
     let locationName: String
@@ -29,6 +30,7 @@ class StudentLocationAnnotation: NSObject, MKAnnotation {
     }
 }
 
+// MARK : StudentLocation class will store information of currect student geocoded location details. 
 class StudentLocation  {
     var title : String
     var latitude : Double

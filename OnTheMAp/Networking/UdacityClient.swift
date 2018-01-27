@@ -60,7 +60,7 @@ class UdacityClient: NSObject {
     
     func refreshData(_ handlerReloadData : @escaping (_ success : Bool, _ error : String?) -> Void ) {
         // Remove old data
-        studentDelegate.sharedInstance().student.removeAll()
+        studentDelegate.sharedInstance().students.removeAll()
         // reload data
         
         self.studentData { (success, error) in
@@ -150,7 +150,7 @@ class UdacityClient: NSObject {
                 decoder.dataDecodingStrategy = .deferredToData
                 let parseResult = try decoder.decode(Student.self, from: data!)
                 
-                self.studentDelegate.sharedInstance().student.append(contentsOf: parseResult.results)
+                self.studentDelegate.sharedInstance().students.append(contentsOf: parseResult.results)
                 
                 handlerForstudentData(true, nil)
             } catch {
@@ -200,7 +200,7 @@ class UdacityClient: NSObject {
                 decoder.dataDecodingStrategy = .deferredToData
                 let parseResult = try decoder.decode(Student.self, from: data!)
                 if parseResult.results.count != 0 {
-                    self.studentDelegate.sharedInstance().student.append(contentsOf: parseResult.results)
+                    self.studentDelegate.sharedInstance().students.append(contentsOf: parseResult.results)
                     for stu in parseResult.results {
                         self.studentDelegate.sharedInstance().currentUserObjectID = stu.objectId
                         break

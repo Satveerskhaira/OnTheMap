@@ -46,14 +46,14 @@ class StudentTableViewController: UITableViewController {
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-        return (apiClient.sharedInstance().student.count)
+        return (apiClient.sharedInstance().students.count)
     }
 
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         // get cell type
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
-        let student = apiClient.sharedInstance().student[(indexPath as NSIndexPath).row]
+        let student = apiClient.sharedInstance().students[(indexPath as NSIndexPath).row]
         cell.textLabel!.text = "\(student.firstName ?? " ") \(student.lastName ?? " ")"
         cell.detailTextLabel?.text = student.mediaURL
         return cell
@@ -79,7 +79,7 @@ class StudentTableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
     // Open linked web site
         let app = UIApplication.shared
-        let student = apiClient.sharedInstance().student[(indexPath as NSIndexPath).row]
+        let student = apiClient.sharedInstance().students[(indexPath as NSIndexPath).row]
         if let toOpen = student.mediaURL {
             app.open(URL(string: toOpen)!, options: [:], completionHandler: nil)
         }

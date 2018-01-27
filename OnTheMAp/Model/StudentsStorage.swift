@@ -11,11 +11,11 @@ import Foundation
 
 final class StudentsStorage {
     
-    var student = [Student.Results]()
-    var studentID : String?
-    var session : String?
-    var user : UserData? = nil
-    var currentUserObjectID : String?  = nil
+    var students = [Student.Results]() // Students detail array
+    var studentID : String? // Current student ID
+    var session : String? // Session id
+    var user : UserData? = nil // Current User
+    var currentUserObjectID : String?  = nil // Current User Object ID to change or add new location
     
     private init() {
     }

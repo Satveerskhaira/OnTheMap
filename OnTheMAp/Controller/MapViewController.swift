@@ -71,7 +71,7 @@ class MapViewController: UIViewController {
     
     func addAnnotation() {
         
-        for student in (apiClient.sharedInstance().student) {
+        for student in (apiClient.sharedInstance().students) {
             if student.firstName == nil || student.lastName == nil || student.latitude == nil  || student.longitude == nil {
                 // Do nothing
             } else {
