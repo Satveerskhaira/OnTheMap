@@ -135,12 +135,11 @@
 				D8E4F24E1FD48FF8006AE56A /* Info.plist */,
 				D8E4F2491FD48FF8006AE56A /* Assets.xcassets */,
 				D8E4F2401FD48FF8006AE56A /* AppDelegate.swift */,
-				D8E4F2761FD493F3006AE56A /* Additional Data */,
+				D866B6071FE5EC680028D46A /* GCDBlackBox.swift */,
 				D8E4F2741FD493C1006AE56A /* Controller */,
 				D8E4F2731FD493BA006AE56A /* View */,
 				D8E4F2721FD493B2006AE56A /* Model */,
 				D8E4F2701FD49394006AE56A /* Networking */,
-				D866B6071FE5EC680028D46A /* GCDBlackBox.swift */,
 			);
 			path = OnTheMAp;
 			sourceTree = "<group>";
@@ -166,6 +165,8 @@
 		D8E4F2701FD49394006AE56A /* Networking */ = {
 			isa = PBXGroup;
 			children = (
+				D8B575AB1FD4DB2E00E48B42 /* UdacityClient.swift */,
+				D8B575AF1FD4DE8100E48B42 /* UdacityConstants.swift */,
 			);
 			path = Networking;
 			sourceTree = "<group>";
@@ -174,8 +175,6 @@
 			isa = PBXGroup;
 			children = (
 				D8E4F2791FD4D673006AE56A /* ParseData.swift */,
-				D8B575AB1FD4DB2E00E48B42 /* UdacityClient.swift */,
-				D8B575AF1FD4DE8100E48B42 /* UdacityConstants.swift */,
 				D866B6021FE23CF70028D46A /* StudentLocationAnnotation.swift */,
 				D88A7C05201C1D340079EE9B /* StudentsStorage.swift */,
 			);
@@ -201,13 +200,6 @@
 				D8AFDA8D1FE6F24700D8DED1 /* StoreStudentLoactionViewController.swift */,
 			);
 			path = Controller;
-			sourceTree = "<group>";
-		};
-		D8E4F2761FD493F3006AE56A /* Additional Data */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = "Additional Data";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
