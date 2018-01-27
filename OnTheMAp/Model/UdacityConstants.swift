@@ -9,18 +9,17 @@
 import Foundation
 
 struct Constants {
-    // Not needed
-    // MARK: API Key
-    static let ApiKey = "f37d9be069406a7592ea952c11e34d09"
     
     // MARK: URLs
     static let ApiScheme = "https"
-    static let ApiHost = "www.udacity.com"
+    static let ApiHost = "parse.udacity.com"
     static let ApiPath = "/"
-    static let Session = "session"
+    static let Session = "https://www.udacity.com/api/session?"
     static let StudentLocation = "parse/classes/StudentLocation"
     static let ChangeLocation = "https://parse.udacity.com/parse/classes/StudentLocation/<objectId>"
-    }
+    static let logout = "https://www.udacity.com/api/session"
+    static let postPut = "https://parse.udacity.com/parse/classes/StudentLocation"
+}
 
 // MARK: Methods
 struct Methods {

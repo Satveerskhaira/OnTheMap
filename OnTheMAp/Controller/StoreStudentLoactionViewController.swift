@@ -17,17 +17,23 @@ class StoreStudentLoactionViewController: UIViewController, MKMapViewDelegate {
     var studentURL : String?
     var matchingItems: [MKMapItem] = [MKMapItem]()
     var newLocationcationDetail : StudentLocation!
-    var appDelegate: UdacityClient!
     let regionRadius: CLLocationDistance = 1000000
+    var myActivityIndicator = UIActivityIndicatorView()
+    
+    @IBOutlet weak var finished: UIButton!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        // get the app delegate
-        appDelegate = UdacityClient.sharedInstance()
+        
+        //Create Activity Indicator
+        activityIndicator(myActivityIndicator)
     }
     
     override func viewDidAppear(_ animated: Bool) {
         
         super.viewDidAppear(animated)
+        
+        self.updateUI(false, 0.5)
         // Do any additional setup after loading the view.
         let searchLocation = MKLocalSearchRequest()
         searchLocation.naturalLanguageQuery = studentLocation
@@ -38,16 +44,18 @@ class StoreStudentLoactionViewController: UIViewController, MKMapViewDelegate {
         let search = MKLocalSearch(request: searchLocation)
         
         search.start { (respone, error) in
+            
+            
             if error == nil {
                 guard let res = respone else {
-                    self.showAlert("Network issue while finding Location", alertTitle: "Location", action: false, addLocationSegue: { (success) in
-                        // No action
+                    self.showAlert("Network issue while finding Location, Search again", alertTitle: "Location", action: false, addLocationSegue: { (success) in
+                        self.updateUI(true, 1.0)
                     })
                     return
                 }
                 if res.mapItems.count == 0 {
-                    self.showAlert("Location not found", alertTitle: "Location", action: false, addLocationSegue: { (success) in
-                        // No action
+                    self.showAlert("Location not found, Search again", alertTitle: "Location", action: false, addLocationSegue: { (success) in
+                        self.updateUI(true, 1.0)
                     })
                 } else {
                     for item in res.mapItems {
@@ -61,13 +69,14 @@ class StoreStudentLoactionViewController: UIViewController, MKMapViewDelegate {
                         annotation.title = item.name
                         self.mapView.addAnnotation(annotation)
                         self.centerMapOnLocation(location: CLLocation.init(latitude: item.placemark.coordinate.latitude, longitude: item.placemark.coordinate.longitude))
+                        self.updateUI(true, 1.0)
                         break
                     }
                 }
             }
             else {
-                self.showAlert("Could not Geocode the string", alertTitle: "Location not found", action: false, addLocationSegue: { (success) in
-                    // No action
+                self.showAlert("Could not Geocode the string, Search again", alertTitle: "Location not found", action: false, addLocationSegue: { (success) in
+                    self.updateUI(true, 1.0)
                 })
                 return
             }
@@ -88,36 +97,45 @@ class StoreStudentLoactionViewController: UIViewController, MKMapViewDelegate {
     
     // MARK : Add new location
     @IBAction func finish(_ sender: Any) {
+       
         if matchingItems.count == 0 {
-            self.showAlert("Location not found", alertTitle: "New Location", action: false) {(success) in
+            self.showAlert("Location not found, Search again", alertTitle: "New Location", action: false) {(success) in
                 //Do nothing
             }
         } else {
-            var url = "https://parse.udacity.com/parse/classes/StudentLocation"
-            var method = ""
-            if appDelegate.currentUserObjectID == nil {
-                method = "POST"
-            } else  {
-                method = "PUT"
-                url = url + "/\(appDelegate.currentUserObjectID!)"
-            }
+            
             guard let newLocation = newLocationcationDetail else {
-                print("Location not found")
+                self.showAlert("Location not found, Search again", alertTitle: "New Location", action: false) {(success) in
+                    //Do nothing
+                }
                 return
             }
-            UdacityClient.sharedInstance().postPut(newLocation, studentURL!, url, method: method, handlerForUpdate: { (success, error) in
+            UdacityClient.sharedInstance().postPut(newLocation, studentURL!, handlerForUpdate: { (success, error) in
                 if success {
                     performUIUpdatesOnMain {
                         //code for unwind and reload
                         self.performSegue(withIdentifier: "unwind", sender: self)
                     }
                 } else  {
-                    print(error!)
+                    self.showAlert(error!, alertTitle: "New location Posting failed", action: false) {(success) in
+                        //Do nothing
+                    }
                     return
                 }
             })
         }
+    }
+
+    // MARK : Activity controller
+    
+    func updateUI(_ intractionEnabled : Bool, _ alpha : CGFloat ) {
+        performUIUpdatesOnMain {
+            self.finished.isEnabled = intractionEnabled
+            self.mapView.isUserInteractionEnabled = intractionEnabled
+            self.mapView.alpha = alpha
+            self.activity(self.myActivityIndicator, intractionEnabled)
         }
-       
+    }
+
 }
 

@@ -13,12 +13,11 @@ class StudentTableViewController: UITableViewController {
     @IBOutlet var studentTableView: UITableView!
     
     
-    var appDelegate: UdacityClient!
+    var apiClient = StudentsStorage.self
      var myActivityIndicator = UIActivityIndicatorView()
     override func viewDidLoad() {
         super.viewDidLoad()
-        appDelegate = UdacityClient.sharedInstance()
-        
+               
         // create and set logout button
         navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .reply, target: self, action: #selector(logout))
         
@@ -26,18 +25,15 @@ class StudentTableViewController: UITableViewController {
         activityIndicator(myActivityIndicator)
     }
 
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
-
     @IBAction func addNewLocation(_ sender: Any) {
-        if (appDelegate.user != nil) {
+        if (apiClient.sharedInstance().currentUserObjectID != nil) {
             showAlert("Student Location Already present. Do you want to override location", alertTitle: "Add Location", action: true, addLocationSegue: { (success) in
                 if success {
                     self.performSegue(withIdentifier: "Add", sender: self)
                 }
             })
+        } else {
+            self.performSegue(withIdentifier: "Add", sender: self)
         }
     }
     
@@ -50,14 +46,14 @@ class StudentTableViewController: UITableViewController {
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-        return (appDelegate.student.count)
+        return (apiClient.sharedInstance().student.count)
     }
 
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         // get cell type
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
-        let student = appDelegate.student[(indexPath as NSIndexPath).row]
+        let student = apiClient.sharedInstance().student[(indexPath as NSIndexPath).row]
         cell.textLabel!.text = "\(student.firstName ?? " ") \(student.lastName ?? " ")"
         cell.detailTextLabel?.text = student.mediaURL
         return cell
@@ -72,7 +68,9 @@ class StudentTableViewController: UITableViewController {
             if success {
                 self.dismiss(animated: true, completion: nil)
             } else {
-                print(error!)
+                self.showAlert(error!, alertTitle: "Logout Failed", action: false, addLocationSegue: { (success) in
+                    self.updateUI(true, 1.0, false)
+                })
             }
         }
     }
@@ -81,7 +79,7 @@ class StudentTableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
     // Open linked web site
         let app = UIApplication.shared
-        let student = appDelegate.student[(indexPath as NSIndexPath).row]
+        let student = apiClient.sharedInstance().student[(indexPath as NSIndexPath).row]
         if let toOpen = student.mediaURL {
             app.open(URL(string: toOpen)!, options: [:], completionHandler: nil)
         }

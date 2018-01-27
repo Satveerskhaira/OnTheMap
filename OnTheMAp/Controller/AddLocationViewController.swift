@@ -12,13 +12,12 @@ class AddLocationViewController: UIViewController {
 
     @IBOutlet weak var newLocation: UITextField!
     @IBOutlet weak var studentURL: UITextField!
-    var appDelegate: UdacityClient!
+    var apiClient = StudentsStorage.self
     
     override func viewDidLoad() {
         super.viewDidLoad()
         newLocation.delegate = self
         studentURL.delegate = self
-        appDelegate = UdacityClient.sharedInstance()
         
     }
 

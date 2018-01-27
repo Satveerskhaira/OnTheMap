@@ -10,6 +10,7 @@
 		D866B6031FE23CF70028D46A /* StudentLocationAnnotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = D866B6021FE23CF70028D46A /* StudentLocationAnnotation.swift */; };
 		D866B6061FE23D0D0028D46A /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D866B6051FE23D0D0028D46A /* MapKit.framework */; };
 		D866B6081FE5EC680028D46A /* GCDBlackBox.swift in Sources */ = {isa = PBXBuildFile; fileRef = D866B6071FE5EC680028D46A /* GCDBlackBox.swift */; };
+		D88A7C06201C1D340079EE9B /* StudentsStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = D88A7C05201C1D340079EE9B /* StudentsStorage.swift */; };
 		D8A666352016EA820078B7C6 /* StudentTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8A666342016EA820078B7C6 /* StudentTableViewController.swift */; };
 		D8AFDA8C1FE6EE7900D8DED1 /* AddLocationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8AFDA8B1FE6EE7900D8DED1 /* AddLocationViewController.swift */; };
 		D8AFDA8E1FE6F24700D8DED1 /* StoreStudentLoactionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8AFDA8D1FE6F24700D8DED1 /* StoreStudentLoactionViewController.swift */; };
@@ -48,6 +49,7 @@
 		D866B6021FE23CF70028D46A /* StudentLocationAnnotation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StudentLocationAnnotation.swift; sourceTree = "<group>"; };
 		D866B6051FE23D0D0028D46A /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		D866B6071FE5EC680028D46A /* GCDBlackBox.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GCDBlackBox.swift; sourceTree = "<group>"; };
+		D88A7C05201C1D340079EE9B /* StudentsStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StudentsStorage.swift; sourceTree = "<group>"; };
 		D8A666342016EA820078B7C6 /* StudentTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StudentTableViewController.swift; sourceTree = "<group>"; };
 		D8AFDA8B1FE6EE7900D8DED1 /* AddLocationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddLocationViewController.swift; sourceTree = "<group>"; };
 		D8AFDA8D1FE6F24700D8DED1 /* StoreStudentLoactionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreStudentLoactionViewController.swift; sourceTree = "<group>"; };
@@ -175,6 +177,7 @@
 				D8B575AB1FD4DB2E00E48B42 /* UdacityClient.swift */,
 				D8B575AF1FD4DE8100E48B42 /* UdacityConstants.swift */,
 				D866B6021FE23CF70028D46A /* StudentLocationAnnotation.swift */,
+				D88A7C05201C1D340079EE9B /* StudentsStorage.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -345,6 +348,7 @@
 				D866B6031FE23CF70028D46A /* StudentLocationAnnotation.swift in Sources */,
 				D8B575AE1FD4DDA300E48B42 /* LoginViewController.swift in Sources */,
 				D8A666352016EA820078B7C6 /* StudentTableViewController.swift in Sources */,
+				D88A7C06201C1D340079EE9B /* StudentsStorage.swift in Sources */,
 				D8AFDA8E1FE6F24700D8DED1 /* StoreStudentLoactionViewController.swift in Sources */,
 				D8B575AC1FD4DB2E00E48B42 /* UdacityClient.swift in Sources */,
 				D8E4F2411FD48FF8006AE56A /* AppDelegate.swift in Sources */,

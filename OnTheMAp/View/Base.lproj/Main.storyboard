@@ -182,6 +182,7 @@
                     </view>
                     <navigationItem key="navigationItem" id="zVk-gc-4kg"/>
                     <connections>
+                        <outlet property="finished" destination="eqM-eo-bW2" id="khJ-OK-lgz"/>
                         <outlet property="mapView" destination="6ga-El-UO8" id="iGY-bb-dvO"/>
                         <segue destination="64K-3x-yOP" kind="unwind" identifier="unwind" unwindAction="unwindSegueWithSegue:" id="9KV-EY-0OK"/>
                     </connections>

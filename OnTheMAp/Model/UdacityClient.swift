@@ -17,13 +17,7 @@ class UdacityClient: NSObject {
     
     let networkSession = URLSession.shared
     
-    // authentication state
-    
-    var student = [Student.Results]()
-    var studentID : String?
-    var session : String?
-    var user : UserData? = nil
-    var currentUserObjectID : String?  = nil
+    let studentDelegate = StudentsStorage.self
     
     // MARK: Initializers
     
@@ -37,28 +31,21 @@ class UdacityClient: NSObject {
     
     func authenticateWithViewController(_ name: String, _ pwd : String, _ viewController: UIViewController, handlerForAuth: @escaping (_ success : Bool, _ errorString : String?) -> Void) {
         // Create Session
+        
+        
         self.getSession(name, pwd) { (success, error) in
             if success {
                 // If session success get data current student data
                 // current student location.
                 self.studentData(handlerForstudentData: { (success, error) in
                     if success {
-                        self.currentStudentLocation(handlerForCurrentStuLocation: { (success, error) in
-                            if success {
-                                //No action
-                               // handlerForAuth(true, nil)
-                            }
-                            if error != nil {
-                                print(error!)
-                            }
-                        })
                         self.currentStudentData({ (success, error) in
-                            if success {
-                                handlerForAuth(true, nil)
-                            } else {
-                                handlerForAuth(false, error)
-                            }
+                           //Get currect student location if present even if error occured other student data is loaded will be shown. So only True is passed in this block.
+                            self.currentStudentLocation(handlerForCurrentStuLocation: { (success, error) in
+                                handlerForAuth(true, error)
+                            })
                         })
+                        
                     } else {
                         handlerForAuth(false, error)
                     }
@@ -73,7 +60,7 @@ class UdacityClient: NSObject {
     
     func refreshData(_ handlerReloadData : @escaping (_ success : Bool, _ error : String?) -> Void ) {
         // Remove old data
-        student.removeAll()
+        studentDelegate.sharedInstance().student.removeAll()
         // reload data
         
         self.studentData { (success, error) in
@@ -95,23 +82,20 @@ class UdacityClient: NSObject {
     
     func getSession(_ name : String, _ pwd : String, _ handlerForSession : @escaping (_ success : Bool, _ errorString : String?) -> Void) {
         
-        //User name
-       // let name = "satveersingh@outlook.com"
-       // let pwd = "kherasatveer"
-        
         if !(name.isEmpty)  && !(pwd.isEmpty) {
             
             //Create URL
             //parameters
            
-            var request = URLRequest(url: URL(string: "https://www.udacity.com/api/session?")!)
-            request.httpMethod = "POST"
+            var request = URLRequest(url: URL(string: Constants.Session)!)
+            request.httpMethod = Methods.post
             request.addValue("application/json", forHTTPHeaderField: "Accept")
             request.addValue("application/json", forHTTPHeaderField: "Content-Type")
             request.httpBody = "{\"udacity\": {\"username\": \"\(name)\", \"password\": \"\(pwd)\"}}".data(using: String.Encoding.utf8)
             let session = URLSession.shared
             let task = session.dataTask(with: request) { data, response, error in
                 if error != nil { // Handle error…
+                    handlerForSession(false, error?.localizedDescription)
                     return
                 }
                 let range = Range(5..<data!.count)
@@ -121,8 +105,8 @@ class UdacityClient: NSObject {
                 do {
                     let parseResult = try decoder.decode(Udacity.self, from: newData!)
                     if parseResult.session.id != " " {
-                        self.session = parseResult.session.id
-                        self.studentID = parseResult.account.key
+                        self.studentDelegate.sharedInstance().session = parseResult.session.id
+                        self.studentDelegate.sharedInstance().studentID = parseResult.account.key
                         // Call back login handler:
                         handlerForSession(true, nil)
                     }
@@ -131,7 +115,7 @@ class UdacityClient: NSObject {
                         let parseError = try decoder.decode(UdacityError.self, from: newData!)
                         handlerForSession(false, parseError.error)
                     } catch {
-                        handlerForSession(false, "Could not connect with Udacity")
+                        handlerForSession(false, "Could not connect with Udacity server")
                     }
                 }
             }
@@ -143,16 +127,22 @@ class UdacityClient: NSObject {
     
     func studentData(handlerForstudentData :@escaping (_ success : Bool, _ error : String?) -> Void) {
         
-        // Student data
-        //let urlString = "https://parse.udacity.com/parse/classes/StudentLocation"
-        let urlString = "https://parse.udacity.com/parse/classes/StudentLocation?order=-updatedAt"
-        let url = URL(string: urlString)
-        var request = URLRequest(url: url!)
+        // Set parameter
+        
+        var parameter = [String:String]()
+        parameter["order"] = "-updatedAt"
+        parameter["limit"] = "100"
+        // Create URL
+        let url = udacityURLWithParameter(parameter as [String : AnyObject], withPathExtension : Constants.StudentLocation)
+        
+        // Create Request
+        var request = URLRequest(url: url)
         request.addValue("QrX47CA9cyuGewLdsL7o5Eb8iug6Em8ye0dnAbIr", forHTTPHeaderField: "X-Parse-Application-Id")
         request.addValue("QuWThTdiRmTux3YaDseUSEpUKo7aBYM737yKd4gY", forHTTPHeaderField: "X-Parse-REST-API-Key")
         let session = URLSession.shared
         let task = session.dataTask(with: request) { data, response, error in
             if error != nil { // Handle error
+                handlerForstudentData(false, error?.localizedDescription)
                 return
             }
             do {
@@ -160,13 +150,31 @@ class UdacityClient: NSObject {
                 decoder.dataDecodingStrategy = .deferredToData
                 let parseResult = try decoder.decode(Student.self, from: data!)
                 
-                self.student.append(contentsOf: parseResult.results)
+                self.studentDelegate.sharedInstance().student.append(contentsOf: parseResult.results)
+                
                 handlerForstudentData(true, nil)
             } catch {
-                handlerForstudentData(true, "Could not load data from Udacity network")
+                handlerForstudentData(false, "Could not load data from Udacity network: '\(String(data: data!, encoding: .utf8)!)'")
             }
         }
         task.resume()
+    }
+    
+    // MARK : create a URL from parameters
+    func udacityURLWithParameter(_ parameters: [String:AnyObject], withPathExtension: String? = nil) -> URL {
+        
+        var components = URLComponents()
+        components.scheme = Constants.ApiScheme
+        components.host = Constants.ApiHost
+        components.path = Constants.ApiPath + (withPathExtension ?? "")
+        components.queryItems = [URLQueryItem]()
+        
+        for (key, value) in parameters {
+            let queryItem = URLQueryItem(name: key, value: "\(value)")
+            components.queryItems!.append(queryItem)
+        }
+        
+        return components.url!
     }
     
     //MARK: Get Current student location information if present
@@ -175,8 +183,8 @@ class UdacityClient: NSObject {
     
     func currentStudentLocation(handlerForCurrentStuLocation : @escaping (_ success : Bool, _ error : String?) -> Void) {
         // Student data
-        //let urlString = "https://parse.udacity.com/parse/classes/StudentLocation?where=%7B%22uniqueKey%22%3A%22\(self.appDelegate.studentID)%22%7D"
-        let urlString = "https://parse.udacity.com/parse/classes/StudentLocation?where=%7B%22uniqueKey%22%3A%224343538699%22%7D"
+        let stuID = studentDelegate.sharedInstance().studentID!
+        let urlString = "https://parse.udacity.com/parse/classes/StudentLocation?where=%7B%22uniqueKey%22%3A%22\(stuID)%22%7D"
         let url = URL(string: urlString)
         var request = URLRequest(url: url!)
         request.addValue("QrX47CA9cyuGewLdsL7o5Eb8iug6Em8ye0dnAbIr", forHTTPHeaderField: "X-Parse-Application-Id")
@@ -184,6 +192,7 @@ class UdacityClient: NSObject {
         let session = URLSession.shared
         let task = session.dataTask(with: request) { data, response, error in
             if error != nil { // Handle error
+                handlerForCurrentStuLocation(false, error?.localizedDescription)
                 return
             }
             do {
@@ -191,9 +200,9 @@ class UdacityClient: NSObject {
                 decoder.dataDecodingStrategy = .deferredToData
                 let parseResult = try decoder.decode(Student.self, from: data!)
                 if parseResult.results.count != 0 {
-                    self.student.append(contentsOf: parseResult.results)
+                    self.studentDelegate.sharedInstance().student.append(contentsOf: parseResult.results)
                     for stu in parseResult.results {
-                        self.currentUserObjectID = stu.objectId
+                        self.studentDelegate.sharedInstance().currentUserObjectID = stu.objectId
                         break
                     }
                 }
@@ -212,11 +221,12 @@ class UdacityClient: NSObject {
     func currentStudentData(_ handlerForCurrentStuData : @escaping (_ success : Bool, _ error : String?) -> Void ) {
         
         // Student data
-        let studentID1 = studentID!
+        let studentID1 = studentDelegate.sharedInstance().studentID!
         let request = URLRequest(url: URL(string: "https://www.udacity.com/api/users/\(studentID1)")!)
         let session = URLSession.shared
         let task = session.dataTask(with: request) { data, response, error in
             if error != nil { // Handle error
+                handlerForCurrentStuData(false, error?.localizedDescription)
                 return
             }
             
@@ -228,7 +238,7 @@ class UdacityClient: NSObject {
                 decoder.dataDecodingStrategy = .deferredToData
                 let parseResult = try decoder.decode(UserData.self, from: newData!)
                 // Call function for current student location
-                self.user = parseResult
+                self.studentDelegate.sharedInstance().user = parseResult
                handlerForCurrentStuData(true, nil)
             } catch {
                 handlerForCurrentStuData(false, "User not found in udacity account")
@@ -239,11 +249,20 @@ class UdacityClient: NSObject {
     
     // MARK : Udpate or add student location
     
-    func postPut (_ newLocation : StudentLocation!, _ webAddress : String, _ url: String, method : String, handlerForUpdate : @escaping (_ success :Bool, _ error : String?) -> Void ) {
+    func postPut (_ newLocation : StudentLocation!, _ webAddress : String,  handlerForUpdate : @escaping (_ success :Bool, _ error : String?) -> Void ) {
         
-        let lastName = user!.user.lastName
-        let firstName = user!.user.firstName
-        let id = studentID!
+        var url = Constants.postPut
+        var method = ""
+        if studentDelegate.sharedInstance().currentUserObjectID == nil {
+            method = "POST"
+        } else  {
+            method = "PUT"
+            url = url + "/\(studentDelegate.sharedInstance().currentUserObjectID!)"
+        }
+        
+        let lastName = studentDelegate.sharedInstance().user!.user.lastName
+        let firstName = studentDelegate.sharedInstance().user!.user.firstName
+        let id = studentDelegate.sharedInstance().studentID!
         
         
         // Calling method PUT or POST
@@ -260,6 +279,7 @@ class UdacityClient: NSObject {
         let task = session.dataTask(with: request) { data, response, error in
             if error != nil { // Handle error…
                 handlerForUpdate(false, error?.localizedDescription)
+                return
             }
             handlerForUpdate(true, nil)
         }
@@ -269,7 +289,7 @@ class UdacityClient: NSObject {
     // MARK : Logout
     
     func logout(_ handlerForLogout : @escaping (_ success : Bool, _ error : String?) -> Void) {
-        var request = URLRequest(url: URL(string: "https://www.udacity.com/api/session")!)
+        var request = URLRequest(url: URL(string: Constants.logout)!)
         request.httpMethod = "DELETE"
         var xsrfCookie: HTTPCookie? = nil
         let sharedCookieStorage = HTTPCookieStorage.shared
@@ -283,6 +303,7 @@ class UdacityClient: NSObject {
         let task = session.dataTask(with: request) { data, response, error in
             if error != nil { // Handle error…
                 handlerForLogout(false, error?.localizedDescription)
+                return
             }
             let range = Range(5..<data!.count)
             guard let newData = data?.subdata(in: range) /* subset response data! */ else {
@@ -293,6 +314,8 @@ class UdacityClient: NSObject {
         }
         task.resume()
     }
+
+    
 
     
     // MARK: Shared Instance

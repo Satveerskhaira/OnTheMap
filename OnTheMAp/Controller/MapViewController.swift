@@ -14,15 +14,14 @@ class MapViewController: UIViewController {
     @IBOutlet weak var mapView: MKMapView!
     //properties for student array
     
-    var appDelegate: UdacityClient!
+    var apiClient = StudentsStorage.self
     var studentLocationAnnotation : [StudentLocationAnnotation] = []
     var myActivityIndicator = UIActivityIndicatorView()
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         //Set Appdelegate
-        
-        // get the app delegate
-        appDelegate = UdacityClient.sharedInstance()
         
         //Set MapView delegate
         mapView.delegate = self
@@ -46,18 +45,20 @@ class MapViewController: UIViewController {
                 
             } else {
                 self.showAlert(error!, alertTitle: "Logout Failed", action: false, addLocationSegue: { (success) in
-                    // No Action
+                    self.updateUI(true, 1.0, false)
                 })
             }
         }
     }
     @IBAction func addNewLocation(_ sender: Any) {
-        if (appDelegate.user != nil) {
+        if (apiClient.sharedInstance().currentUserObjectID != nil) {
             showAlert("Student Location Already present. Do you want to override location", alertTitle: "Add Location", action: true, addLocationSegue: { (success) in
                 if success {
                     self.performSegue(withIdentifier: "Add", sender: self)
                 }
             })
+        } else {
+            self.performSegue(withIdentifier: "Add", sender: self)
         }
     }
     
@@ -70,7 +71,7 @@ class MapViewController: UIViewController {
     
     func addAnnotation() {
         
-        for student in (appDelegate.student) {
+        for student in (apiClient.sharedInstance().student) {
             if student.firstName == nil || student.lastName == nil || student.latitude == nil  || student.longitude == nil {
                 // Do nothing
             } else {
